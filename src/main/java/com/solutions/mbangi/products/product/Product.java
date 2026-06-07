@@ -11,6 +11,10 @@ public class Product {
     private Long id;
     private String name;
     private String price;
+    @Lob
+    @Column(name = "image_data", length = 1000000)
+    private byte[] imageData;
+    private String imageType;
     private String imageUrl;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -21,11 +25,13 @@ public class Product {
 
     public Product() {
     }
-
-    public Product(Long id, String name, String price, String imageUrl, String description, Category category) {
+    
+    public Product(Long id, String name, String price, byte[] imageData, String imageType, String imageUrl, String description, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.imageData = imageData;
+        this.imageType = imageType;
         this.imageUrl = imageUrl;
         this.description = description;
         this.category = category;
@@ -54,6 +60,22 @@ public class Product {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 
     public String getImageUrl() {

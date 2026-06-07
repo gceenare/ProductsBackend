@@ -1,8 +1,6 @@
 package com.solutions.mbangi.products.product;
 
 import com.solutions.mbangi.products.category.Category;
-import com.solutions.mbangi.products.category.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,37 +9,47 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     public List<Product> getProductsByCategory(Long categoryId) {
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        return category.map(productRepository::findByCategory).orElse(List.of());
+        return productRepository.findByCategoryId(categoryId);
+    }
+
+    public Optional<Product> getProductById(Long id) {
+        return productRepository.findById(id);
     }
 
     public Product createProduct(Product product) {
         return productRepository.save(product);
     }
 
-    public Product updateProduct(Long id, Product productDetails) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isPresent()) {
-            Product existingProduct = product.get();
+    public Optional<Product> updateProduct(Long id, Product productDetails) {
+        return productRepository.findById(id).map(existingProduct -> {
             existingProduct.setName(productDetails.getName());
             existingProduct.setPrice(productDetails.getPrice());
-            existingProduct.setImageUrl(productDetails.getImageUrl());
             existingProduct.setDescription(productDetails.getDescription());
-            existingProduct.setCategory(productDetails.getCategory());
+            if (productDetails.getImageData() != null) {
+                existingProduct.setImageData(productDetails.getImageData());
+            }
+            if (productDetails.getImageType() != null) {
+                existingProduct.setImageType(productDetails.getImageType());
+            }
+            if (productDetails.getImageUrl() != null) {
+                existingProduct.setImageUrl(productDetails.getImageUrl());
+            }
+            if (productDetails.getCategory() != null) {
+                existingProduct.setCategory(productDetails.getCategory());
+            }
             return productRepository.save(existingProduct);
-        }
-        return null;
+        });
     }
 
     public void deleteProduct(Long id) {

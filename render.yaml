@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: products-backend
+    env: java
+    plan: free
+    repo: 
+      type: git
+      # If you use Render's git integration, this will be auto-filled.
+    buildCommand: mvn -DskipTests package
+    startCommand: java -jar target/ProductsBackend-1.0-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: "jdbc:postgresql://<RENDER_DB_HOST>:5432/<DB_NAME>"
+      - key: SPRING_DATASOURCE_USERNAME
+        value: "username"
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: "password"
+      - key: HIBERNATE_DIALECT
+        value: "org.hibernate.dialect.PostgreSQLDialect"
+
+databases:
+  - name: products-backend-db
+    type: postgresql
+    plan: starter
+    # region: your-region (optional)
+    # Note: When the database is created in Render, Render will provide a connection
+    # string. Replace the SPRING_DATASOURCE_URL in the service envVars with that value.
