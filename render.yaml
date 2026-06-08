@@ -6,6 +6,9 @@ services:
     repo:
       type: git
       # If you use Render's git integration, this will be auto-filled.
+    # Root directory relative to the repository root where Render should run
+    # Set this to the folder that contains the Dockerfile, pom.xml and src/
+    root: ProductsBackend
     # When using Docker runtime, Render will use the repository Dockerfile.
     envVars:
       - key: SPRING_DATASOURCE_URL
