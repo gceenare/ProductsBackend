@@ -4,6 +4,9 @@ import com.solutions.mbangi.products.category.Category;
 import com.solutions.mbangi.products.category.CategoryRepository;
 import com.solutions.mbangi.products.product.Product;
 import com.solutions.mbangi.products.product.ProductRepository;
+import com.solutions.mbangi.products.user.User;
+import com.solutions.mbangi.products.user.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +15,12 @@ public class DataSeeder implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public DataSeeder(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    public DataSeeder(CategoryRepository categoryRepository, ProductRepository productRepository, UserRepository userRepository) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -57,6 +62,22 @@ public class DataSeeder implements CommandLineRunner {
             p4.setDescription("Promotional coffee mugs");
             p4.setCategory(promotionalGear);
             productRepository.save(p4);
+        }
+
+        // Create an admin user for admin login in an idempotent way
+        try {
+            String adminUsername = "admin";
+            String adminPasswordPlain = "admin123"; // change this in prod or use env var
+
+            if (!userRepository.existsByUsername(adminUsername)) {
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                String hashed = encoder.encode(adminPasswordPlain);
+                User admin = new User(null, adminUsername, hashed, "ROLE_ADMIN");
+                userRepository.save(admin);
+            }
+        } catch (Exception ex) {
+            // fail safe - don't stop application startup when seeding user
+            System.err.println("Warning: could not create admin user: " + ex.getMessage());
         }
     }
 }
