@@ -12,9 +12,11 @@ services:
     # When using Docker runtime, Render will use the repository Dockerfile.
     envVars:
       - key: SPRING_DATASOURCE_URL
-        value: "jdbc:postgresql://products-backend-db:5432/products_cye7"
+        value: "jdbc:postgresql://products-backend-db:5432/products_backend_db"
       - key: SPRING_DATASOURCE_USERNAME
-        value: "products_user"
+        fromDatabase:
+          name: products-backend-db
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
         fromDatabase:
           name: products-backend-db
