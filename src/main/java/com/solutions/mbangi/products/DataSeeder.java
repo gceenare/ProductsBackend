@@ -67,7 +67,7 @@ public class DataSeeder implements CommandLineRunner {
         // Create an admin user for admin login in an idempotent way
         try {
             String adminUsername = "admin";
-            String adminPasswordPlain = "admin123"; // change this in prod or use env var
+            String adminPasswordPlain = System.getenv("ADMIN_PASSWORD") != null ? System.getenv("ADMIN_PASSWORD") : "admin123";
 
             if (!userRepository.existsByUsername(adminUsername)) {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

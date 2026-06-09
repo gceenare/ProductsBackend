@@ -26,6 +26,3 @@ databases:
   - name: products-backend-db
     type: postgresql
     plan: starter
-    # region: your-region (optional)
-    # Note: When the database is created in Render, Render will provide a connection
-    # string. Replace the SPRING_DATASOURCE_URL in the service envVars with that value.

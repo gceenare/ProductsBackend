@@ -19,6 +19,7 @@ Render deployment steps for ProductsBackend
    - `SPRING_DATASOURCE_USERNAME` = `<DB_USER>`
    - `SPRING_DATASOURCE_PASSWORD` = `<DB_PASSWORD>`
    - `HIBERNATE_DIALECT` = `org.hibernate.dialect.PostgreSQLDialect`
+   - `ADMIN_PASSWORD` = `<YOUR_SECURE_ADMIN_PASSWORD>`
 
 4) (Optional but recommended) Configure health check
    - Health check path: `/actuator/health` (if you enable Spring Actuator) or `/` for simple check
@@ -27,16 +28,6 @@ Render deployment steps for ProductsBackend
 5) Deploy and check logs
    - Trigger deploy from Render (manual or via git push)
    - Watch logs in Render dashboard for migration messages and successful start
-
-6) Local testing before deploy
-   - Export env vars in PowerShell (example):
-
-```powershell
-$env:SPRING_DATASOURCE_URL = 'jdbc:postgresql://<host>:5432/<db>'
-$env:SPRING_DATASOURCE_USERNAME = 'username'
-$env:SPRING_DATASOURCE_PASSWORD = 'password'
-& 'C:\Users\Student\.maven\maven-3.9.11\bin\mvn.cmd' spring-boot:run
-```
 
 7) Notes
    - The project is configured to accept `SPRING_DATASOURCE_*` env vars; if they are not set it will fall back to the (now updated) default values in `application.properties`.
